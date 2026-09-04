@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Đăng ký Tải tăng cường</title>
+  <style>
+    :root { --primary: #F05A1E; --secondary: #1B6CB2; --error: #d93025; --success: #1e8e3e; }
+    * { box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f1ee; margin: 0; padding-bottom: 30px; }
+
+    .banner {
+      position: sticky; top: 0; z-index: 50;
+      background: linear-gradient(135deg, #F05A1E 0%, #FF8A3D 100%);
+      display: flex; align-items: center; gap: 16px;
+      padding: 10px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+    .banner img { height: 44px; display: block; border-radius: 6px; }
+    .banner h1 { color: #fff; font-size: 18px; margin: 0; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,0.15); }
+
+    .page { display: flex; justify-content: center; padding: 20px; }
+    .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 100%; max-width: 500px; }
+    .form-group { margin-bottom: 18px; }
+    label { display: block; font-weight: 600; margin-bottom: 8px; color: #444; font-size: 14px; }
+    input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 15px; transition: border 0.3s; }
+    input:focus, select:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 2px rgba(240,90,30,0.2); }
+    .row { display: flex; gap: 15px; }
+    .row > div { flex: 1; }
+    .btn-submit { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
+    .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
+    #khacGroup { display: none; margin-top: 10px; border-left: 4px solid var(--primary); padding-left: 15px; background: #f8f9fa; padding-top: 10px; padding-bottom: 1px; border-radius: 0 8px 8px 0; }
+    .selector-container { display: flex; gap: 8px; }
+    .selector-container select { flex: 1; text-align: center; }
+    #successModal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:100; }
+    .modal-content { background:white; padding:30px; border-radius:15px; text-align:center; max-width:350px; width:90%; }
+    .ticket-box { background: #fdece3; border: 2px dashed var(--primary); padding: 15px; margin: 15px 0; font-size: 24px; font-weight: bold; color: var(--primary); border-radius: 8px; }
+
+    .btn-photo {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #fff; border: 2px dashed var(--primary); color: var(--primary);
+      padding: 14px; border-radius: 8px; font-weight: 600; font-size: 14px;
+      cursor: pointer; width: 100%; justify-content: center;
+    }
+    .btn-photo:hover { background: #fff6f2; }
+    #photoPreviewWrap { display: none; text-align: center; }
+    #photoPreview { max-width: 100%; max-height: 260px; border-radius: 8px; border: 1px solid #ddd; display: block; margin: 0 auto 10px; }
+    .btn-remove-photo {
+      background: none; border: 1px solid var(--error); color: var(--error);
+      padding: 8px 14px; border-radius: 6px; font-size: 13px; cursor: pointer;
+    }
+    .photo-hint { font-weight: normal; color: #666; font-size: 12px; display: block; margin-top: 6px; }
+  </style>
+</head>
+<body>
+
+<div class="banner">
+  <img src="/logo.png" alt="GHN">
+  <h1>Đăng Ký Tải Tăng Cường</h1>
+</div>
+
+<div class="page">
+<div class="container">
+
+  <form id="tripForm">
+    <div class="form-group">
+      <label>* ID Bưu cục - ví dụ: 2388<br><small style="font-weight:normal; color:#666">Nếu không tìm ra, Hãy xóa đi và chọn 'Khác'</small></label>
+      <input type="text" id="warehouseInput" name="warehouse" list="warehouseList" placeholder="Nhập ID Bưu cục hoặc chọn 'Khác'..." required autocomplete="off">
+      <datalist id="warehouseList"></datalist>
+    </div>
+
+    <div id="khacGroup">
+      <div class="form-group">
+        <label>* Tỉnh/Thành phố</label>
+        <select id="tinhKhacSelect" name="tinh_khac">
+          <option value="" disabled selected>-- Chọn Tỉnh --</option>
+          <option value="Hồ Chí Minh">Hồ Chí Minh</option>
+          <option value="Long An">Long An</option>
+          <option value="Bình Dương">Bình Dương</option>
+          <option value="Tiền Giang">Tiền Giang</option>
+          <option value="Cần Thơ">Cần Thơ</option>
+          <option value="Tây Ninh">Tây Ninh</option>
+          <option value="Bến Tre">Bến Tre</option>
+          <option value="Đồng Tháp">Đồng Tháp</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>* Tên BC mới</label>
+        <input type="text" id="warehouseKhacInput" name="warehouse_khac" placeholder="Nhập tên bưu cục mới...">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>* Lộ trình </label>
+      <select name="lo_trinh" required>
+        <option value="" disabled selected>-- Chọn lộ trình --</option>
+        <option value="Lấy hàng về HCM01">Lấy hàng về HCM01</option>
+        <option value="Lấy hàng về HCM20">Lấy hàng về HCM20</option>
+        <option value="Lấy hàng về 2 Kho">Lấy hàng về 2 Kho</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>* MSNV - ví dụ: 123456</label>
+      <input type="text" name="msnv" class="only-numbers" required>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label>[Không bắt buộc] Tele</label>
+        <input type="text" name="telegram" placeholder="@username">
+      </div>
+      <div class="form-group">
+        <label>* Số điện thoại</label>
+        <input type="text" name="sdt" class="only-numbers" required minlength="9" maxlength="11" placeholder="Ít nhất 9 số">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label>* Số kiện dự kiến</label>
+        <input type="number" name="so_kien" required>
+      </div>
+      <div class="form-group">
+        <label>* Thể tích xe cần</label>
+        <select name="the_tich" required>
+          <option value="" disabled selected>-- Chọn % thể tích --</option>
+          <option value="30%">30%</option>
+          <option value="50%">50%</option>
+          <option value="75%">75%</option>
+          <option value="100%">100%</option>
+          <option value=">100%">>100% (Cần xe lớn/nhiều xe)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label>* Ngày mong muốn</label>
+        <div class="selector-container">
+          <select id="daySelect" required></select>
+          <select id="monthSelect" required></select>
+        </div>
+        <input type="hidden" name="ngay" id="hiddenDate">
+      </div>
+      <div class="form-group">
+        <label>* Giờ mong muốn (24h)</label>
+        <div class="selector-container">
+          <select id="hSelect" required></select>
+          <select id="mSelect" required>
+            <option value="00">00</option>
+            <option value="15">15</option>
+            <option value="30">30</option>
+            <option value="45">45</option>
+          </select>
+        </div>
+        <input type="hidden" name="gio" id="hiddenTime">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>* Hình ảnh hàng tồn tại kho</label>
+      <input type="file" accept="image/*" capture="environment" id="photoInput" style="display:none">
+
+      <button type="button" id="photoBtn" class="btn-photo">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+        Chụp / Chọn ảnh
+      </button>
+
+      <div id="photoPreviewWrap">
+        <img id="photoPreview" alt="Ảnh xem trước">
+        <button type="button" id="removePhotoBtn" class="btn-remove-photo">Xoá ảnh, chụp lại</button>
+      </div>
+
+      <small class="photo-hint">Điện thoại: bấm để mở camera chụp trực tiếp. Máy tính: chọn file ảnh, hoặc copy screenshot rồi dán (Ctrl+V) vào trang này.</small>
+    </div>
+
+    <div class="form-group">
+      <label>[Không bắt buộc] Ghi chú</label>
+      <textarea name="ghi_chu" rows="2"></textarea>
+    </div>
+
+    <button type="submit" class="btn-submit" id="submitBtn">GỬI ĐĂNG KÝ</button>
+  </form>
+</div>
+</div>
+
+<div id="successModal">
+  <div class="modal-content">
+    <div style="font-size: 50px; color: var(--success);">✓</div>
+    <h3>Gửi thành công!</h3>
+    <div id="displayTTC" class="ticket-box">...</div>
+    <button onclick="closeModal()" class="btn-submit">Đóng</button>
+  </div>
+</div>
+
+<script>
+  var debounceTimer;
+
+  function initDateTime() {
+    const today = new Date();
+    const dSelect = document.getElementById('daySelect');
+    const mSelect = document.getElementById('monthSelect');
+    const hSelect = document.getElementById('hSelect');
+    const mSelected = document.getElementById('mSelect');
+
+    dSelect.value = String(today.getDate()).padStart(2, '0');
+    mSelect.value = String(today.getMonth() + 1).padStart(2, '0');
+    hSelect.value = String(today.getHours()).padStart(2, '0');
+    mSelected.value = "00";
+  }
+
+  window.onload = function() {
+    const dSelect = document.getElementById('daySelect');
+    const mSelect = document.getElementById('monthSelect');
+    const hSelect = document.getElementById('hSelect');
+
+    for(let i=1; i<=31; i++) dSelect.add(new Option(i < 10 ? '0'+i : i, i < 10 ? '0'+i : i));
+    for(let i=1; i<=12; i++) mSelect.add(new Option(i < 10 ? '0'+i : i, i < 10 ? '0'+i : i));
+    for(let i=0; i<24; i++) hSelect.add(new Option(i < 10 ? '0'+i : i, i < 10 ? '0'+i : i));
+
+    initDateTime();
+
+    document.querySelectorAll('.only-numbers').forEach(el => {
+      el.oninput = function() { this.value = this.value.replace(/[^0-9]/g, ''); };
+    });
+  };
+
+  const warehouseInput = document.getElementById('warehouseInput');
+  const dl = document.getElementById('warehouseList');
+  const khacGroup = document.getElementById('khacGroup');
+  const khacInput = document.getElementById('warehouseKhacInput');
+  const tinhKhacSelect = document.getElementById('tinhKhacSelect');
+
+  warehouseInput.addEventListener('input', function() {
+    let val = this.value;
+
+    if (val === "Khác") {
+      khacGroup.style.display = "block";
+      khacInput.required = true;
+      tinhKhacSelect.required = true;
+    } else {
+      khacGroup.style.display = "none";
+      khacInput.required = false;
+      tinhKhacSelect.required = false;
+    }
+
+    clearTimeout(debounceTimer);
+
+    // Nếu giá trị đã ở dạng "id - tên" (vừa được chọn từ gợi ý datalist), KHÔNG
+    // search lại nữa. Chọn 1 gợi ý cũng bắn ra sự kiện "input" với giá trị đầy
+    // đủ đó -> nếu search lại, API sẽ không tìm thấy dòng nào khớp nguyên chuỗi
+    // "id - tên", datalist bị xoá trắng (chỉ còn "Khác"), và lúc submit sẽ báo
+    // nhầm "ID Bưu cục không hợp lệ" dù người dùng đã chọn đúng.
+    if (val.includes(' - ')) return;
+
+    debounceTimer = setTimeout(() => {
+      if (val.length >= 2 && val !== "Khác") {
+        fetch('/api/search-warehouse?q=' + encodeURIComponent(val))
+          .then(r => r.json())
+          .then(results => {
+            dl.innerHTML = '<option value="Khác">';
+            results.forEach(item => {
+              let opt = document.createElement('option');
+              opt.value = item;
+              dl.appendChild(opt);
+            });
+          })
+          .catch(() => { /* im lặng bỏ qua lỗi search, không chặn user gõ tiếp */ });
+      } else if (val.length < 2) {
+        dl.innerHTML = '<option value="Khác">';
+      }
+    }, 300);
+  });
+
+  // ================= ẢNH HÀNG TỒN KHO =================
+  const photoInput = document.getElementById('photoInput');
+  const photoBtn = document.getElementById('photoBtn');
+  const photoPreviewWrap = document.getElementById('photoPreviewWrap');
+  const photoPreview = document.getElementById('photoPreview');
+  const removePhotoBtn = document.getElementById('removePhotoBtn');
+
+  let photoDataUrl = null; // ảnh đã resize/nén, sẵn sàng upload lên /api/upload-photo
+
+  function setPhotoFromFile(file) {
+    if (!file || !file.type || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        const MAX_DIM = 1600;
+        let width = img.width, height = img.height;
+        if (width > MAX_DIM || height > MAX_DIM) {
+          const scale = MAX_DIM / Math.max(width, height);
+          width = Math.round(width * scale);
+          height = Math.round(height * scale);
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        photoDataUrl = canvas.toDataURL('image/jpeg', 0.75);
+
+        photoPreview.src = photoDataUrl;
+        photoPreviewWrap.style.display = 'block';
+        photoBtn.style.display = 'none';
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  photoBtn.addEventListener('click', function() { photoInput.click(); });
+
+  photoInput.addEventListener('change', function(e) {
+    if (e.target.files && e.target.files[0]) setPhotoFromFile(e.target.files[0]);
+  });
+
+  removePhotoBtn.addEventListener('click', function() {
+    photoDataUrl = null;
+    photoInput.value = '';
+    photoPreviewWrap.style.display = 'none';
+    photoBtn.style.display = 'inline-flex';
+  });
+
+  // Hỗ trợ dán ảnh (Ctrl+V) — tiện cho máy tính không có webcam/muốn dùng screenshot
+  document.addEventListener('paste', function(e) {
+    const items = e.clipboardData && e.clipboardData.items;
+    if (!items) return;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type && items[i].type.startsWith('image/')) {
+        const file = items[i].getAsFile();
+        setPhotoFromFile(file);
+        e.preventDefault();
+        break;
+      }
+    }
+  });
+
+  // ================= SUBMIT =================
+  document.getElementById('tripForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const form = this;
+
+    const warehouseVal = warehouseInput.value.trim();
+
+    // --- 1. VERIFY ID BƯU CỤC ---
+    const options = Array.from(dl.options).map(opt => opt.value);
+    if (!options.includes(warehouseVal) && warehouseVal !== "Khác") {
+        alert("ID Bưu cục không hợp lệ. Vui lòng chọn ID từ danh sách gợi ý hoặc chọn 'Khác'.");
+        warehouseInput.focus();
+        return;
+    }
+
+    // --- 2. VERIFY 'KHÁC' FIELDS ---
+    if (warehouseVal === "Khác") {
+        if (!tinhKhacSelect.value) {
+            alert("Vui lòng chọn Tỉnh/Thành phố!");
+            tinhKhacSelect.focus();
+            return;
+        }
+        if (khacInput.value.trim() === "") {
+            alert("Vui lòng nhập tên Bưu cục mới!");
+            khacInput.focus();
+            return;
+        }
+    }
+
+    // --- 3. VERIFY SỐ ĐIỆN THOẠI ---
+    const sdtVal = form.sdt.value.trim();
+    if (sdtVal.length < 9) {
+        alert("Số điện thoại phải có ít nhất 9 chữ số!");
+        form.sdt.focus();
+        return;
+    }
+
+    // --- 4. VERIFY ẢNH HÀNG TỒN KHO ---
+    if (!photoDataUrl) {
+      alert("Vui lòng chụp hoặc tải lên ảnh hàng tồn tại kho!");
+      photoBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    // --- 5. PROCEED WITH SUBMISSION ---
+    document.getElementById('hiddenDate').value = document.getElementById('daySelect').value + "/" + document.getElementById('monthSelect').value;
+    document.getElementById('hiddenTime').value = document.getElementById('hSelect').value + ":" + document.getElementById('mSelect').value;
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerText = "Đang tải ảnh lên...";
+
+    const formData = new FormData(form);
+    const payload = {};
+    formData.forEach((value, key) => { payload[key] = value; });
+
+    try {
+      const uploadRes = await fetch('/api/upload-photo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: photoDataUrl })
+      });
+      const uploadData = await uploadRes.json();
+      if (!uploadRes.ok) {
+        alert(uploadData.error || "Không tải ảnh lên được, vui lòng thử lại.");
+        btn.disabled = false;
+        btn.innerText = "GỬI ĐĂNG KÝ";
+        return;
+      }
+      payload.photo_url = uploadData.url;
+
+      btn.innerText = "Đang gửi...";
+      const submitRes = await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const submitData = await submitRes.json();
+      if (!submitRes.ok) {
+        alert(submitData.error || "Có lỗi xảy ra, vui lòng thử lại.");
+        btn.disabled = false;
+        btn.innerText = "GỬI ĐĂNG KÝ";
+        return;
+      }
+
+      document.getElementById('displayTTC').innerText = submitData.ticket_id;
+      document.getElementById('successModal').style.display = "flex";
+
+      form.reset();
+      initDateTime();
+      khacGroup.style.display = "none";
+      photoDataUrl = null;
+      photoPreviewWrap.style.display = 'none';
+      photoBtn.style.display = 'inline-flex';
+
+      btn.disabled = false;
+      btn.innerText = "GỬI ĐĂNG KÝ";
+    } catch (err) {
+      alert("Không kết nối được máy chủ, vui lòng thử lại.");
+      btn.disabled = false;
+      btn.innerText = "GỬI ĐĂNG KÝ";
+    }
+  });
+
+  function closeModal() { document.getElementById('successModal').style.display = "none"; }
+</script>
+</body>
+</html>
