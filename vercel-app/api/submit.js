@@ -8,6 +8,8 @@ const { supabase } = require('./_supabase');
 
 const REQUIRED_FIELDS = ['warehouse', 'lo_trinh', 'msnv', 'sdt', 'so_kien', 'the_tich', 'ngay', 'gio', 'photo_url'];
 
+const ALLOWED_LOAI_XE = ['E-Van', 'Van Gaz', '1T9', '5T', '8T'];
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' });
@@ -78,6 +80,7 @@ module.exports = async (req, res) => {
     ngay_mong_muon: body.ngay,
     gio_mong_muon: body.gio,
     ghi_chu: body.ghi_chu || null,
+    loai_xe: ALLOWED_LOAI_XE.includes(body.loai_xe) ? body.loai_xe : null,
     photo_url: body.photo_url,
   };
 

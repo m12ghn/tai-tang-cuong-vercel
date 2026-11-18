@@ -59,6 +59,7 @@ create table if not exists m12.tickets (
   gio_mong_muon          text,              -- "HH:mm"
   ghi_chu                text,
   photo_url              text,              -- link ảnh hàng tồn kho (Supabase Storage public URL)
+  loai_xe                text,              -- loại xe mong muốn (không bắt buộc): E-Van/Van Gaz/1T9/5T/8T
 
   -- === Trạng thái đồng bộ chiều 1 (Vercel -> Sheet) ===
   synced_to_sheet        boolean not null default false,
@@ -100,3 +101,8 @@ alter table m12.tickets enable row level security;
 --    Không tạo được bucket bằng SQL thuần, phải làm qua Dashboard hoặc
 --    Management API.
 -- ------------------------------------------------------------
+
+-- ------------------------------------------------------------
+-- 6. Migration thêm cột loai_xe cho bảng ĐÃ TỒN TẠI (chạy 1 lần)
+-- ------------------------------------------------------------
+alter table m12.tickets add column if not exists loai_xe text;

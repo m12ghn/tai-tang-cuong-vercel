@@ -98,8 +98,10 @@ function syncFromVercel() {
       // đã là "Trạng thái" theo cấu trúc sheet thật (giống Nội thành/Nội vùng).
       // Dùng cùng cột AE như 2 sheet Nội thành/Nội vùng cho đồng nhất.
       mainSheet.getRange(mainSheet.getLastRow(), 31).setValue(t.photo_url || '');
+      // Loại xe mong muốn -> cột AG (33)
+      mainSheet.getRange(mainSheet.getLastRow(), 33).setValue(t.loai_xe || '');
 
-      distributeDataByRegionWithPhoto(rowData, t.photo_url); // bản có ghi thêm ảnh — xem cuối file
+      distributeDataByRegionWithPhoto(rowData, t.photo_url, t.loai_xe); // bản có ghi thêm ảnh — xem cuối file
 
       // Gửi Telegram ticket mới — dùng lại getRegionConfig()/sendTeleRaw() có sẵn trong Code.js
       const config = getRegionConfig(t.region);
@@ -108,6 +110,7 @@ function syncFromVercel() {
                     `<b>Mã ticket:</b> ${t.ticket_id}\n` +
                     `<b>Bưu cục:</b> ${displayName}\n` +
                     `<b>Lộ trình:</b> ${t.lo_trinh}\n` +
+                    (t.loai_xe ? `<b>Loại xe:</b> ${t.loai_xe}\n` : '') +
                     `<b>Ngày:</b> ${t.ngay_mong_muon} <b>Giờ:</b> ${t.gio_mong_muon}\n` +
                     `<b>Người request:</b> ${t.telegram || "N/A"}\n\n` +
                     `<i>GSVT sẽ sắp xếp xe và sẽ phản hồi.</i>\n\n` +
@@ -277,7 +280,7 @@ function setupReconcileTrigger() {
 // LƯU Ý: cột AE của Nội thành/Nội vùng đã được đặt tên "Hình kho". Nên đặt
 // tiêu đề tương tự ở ô AE1 của Responses cho đồng nhất (bước thủ công).
 // ============================================================
-function distributeDataByRegionWithPhoto(rowData, photoUrl) {
+function distributeDataByRegionWithPhoto(rowData, photoUrl, loaiXe) {
   const ss = SpreadsheetApp.openById('1CEh9tvVTFTZXHRH9qTRsiHQeRX3V6NwUKFMb1CblQkQ');
   const province = rowData[2];
   let targetRowData = [...rowData];
@@ -290,4 +293,5 @@ function distributeDataByRegionWithPhoto(rowData, photoUrl) {
 
   targetSheet.appendRow(targetRowData);
   targetSheet.getRange(targetSheet.getLastRow(), 31).setValue(photoUrl || ''); // cột AE
+  targetSheet.getRange(targetSheet.getLastRow(), 33).setValue(loaiXe || ''); // cột AG: Loại xe mong muốn
 }
