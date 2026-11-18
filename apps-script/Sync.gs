@@ -98,8 +98,8 @@ function syncFromVercel() {
       // đã là "Trạng thái" theo cấu trúc sheet thật (giống Nội thành/Nội vùng).
       // Dùng cùng cột AE như 2 sheet Nội thành/Nội vùng cho đồng nhất.
       mainSheet.getRange(mainSheet.getLastRow(), 31).setValue(t.photo_url || '');
-      // Loại xe mong muốn -> cột AF (32), ngay sau cột AE "Hình kho"
-      mainSheet.getRange(mainSheet.getLastRow(), 32).setValue(t.loai_xe || '');
+      // Loại xe mong muốn -> cột AG (33), ngay sau cột AE "Hình kho"
+      mainSheet.getRange(mainSheet.getLastRow(), 33).setValue(t.loai_xe || '');
 
       distributeDataByRegionWithPhoto(rowData, t.photo_url, t.loai_xe); // bản có ghi thêm ảnh — xem cuối file
 
@@ -293,5 +293,5 @@ function distributeDataByRegionWithPhoto(rowData, photoUrl, loaiXe) {
 
   targetSheet.appendRow(targetRowData);
   targetSheet.getRange(targetSheet.getLastRow(), 31).setValue(photoUrl || ''); // cột AE
-  targetSheet.getRange(targetSheet.getLastRow(), 32).setValue(loaiXe || ''); // cột AF: Loại xe mong muốn
+  targetSheet.getRange(targetSheet.getLastRow(), 33).setValue(loaiXe || ''); // cột AG: Loại xe mong muốn
 }
